@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consolidata - Washroom Design & Code Compliance</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1>🏗️ Consolidata</h1>
+            </div>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#features">Features</a>
+                <a href="#design">Design Tool</a>
+                <a href="#support">Support</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">Streamline Your Washroom Design With Code Compliance</h1>
+                <p class="hero-subtitle">Professional building code compliance and layout generation for Canadian jurisdictions</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="scrollToDesign()">Start Designing</button>
+                    <button class="btn btn-secondary" onclick="testSystem()">Test System</button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="hero-graphic">
+                    <div class="washroom-preview">
+                        <div class="fixture male-wc">M</div>
+                        <div class="fixture female-wc">F</div>
+                        <div class="fixture urinal">U</div>
+                        <div class="fixture lavatory">L</div>
+                        <div class="fixture accessible">♿</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Input Parameters</h3>
+                    <p>Enter building type, occupancy, and jurisdiction requirements</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Generate Checklist</h3>
+                    <p>Automatic compliance checklist based on current building codes</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Preview Layout</h3>
+                    <p>2D layout with proper clearances and accessibility features</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Export AutoCAD</h3>
+                    <p>Professional drawings ready for construction documentation</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h3>Building Code Compliance</h3>
+                    <p>Automated compliance checking for NBC, Alberta, Ontario, and BC building codes</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Layout Generator</h3>
+                    <p>Intelligent 2D layout generation with proper clearances and accessibility</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📐</div>
+                    <h3>AutoCAD Export</h3>
+                    <p>Professional CAD drawings ready for construction documentation</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">♿</div>
+                    <h3>Accessibility Standards</h3>
+                    <p>Full compliance with accessibility requirements and universal design</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔢</div>
+                    <h3>Fixture Calculations</h3>
+                    <p>Accurate fixture requirements based on occupancy and building type</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Real-time Updates</h3>
+                    <p>Instant recalculation when parameters change</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Building Code Support -->
+    <section class="code-support">
+        <div class="container">
+            <h2 class="section-title">Building Code Support Center</h2>
+            <div class="code-grid">
+                <div class="code-card">
+                    <h3>🇨🇦 National Building Code</h3>
+                    <p>Complete NBC 2020 compliance including Division B requirements</p>
+                </div>
+                <div class="code-card">
+                    <h3>🏔️ Alberta Building Code</h3>
+                    <p>Provincial modifications and specific Alberta requirements</p>
+                </div>
+                <div class="code-card">
+                    <h3>🍁 Ontario Building Code</h3>
+                    <p>OBC specific requirements and accessibility standards</p>
+                </div>
+                <div class="code-card">
+                    <h3>🌲 BC Building Code</h3>
+                    <p>British Columbia provincial building code compliance</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Design Tool -->
+    <section id="design" class="design-tool">
+        <div class="container">
+            <h2 class="section-title">Washroom Design Tool</h2>
+            
+            <!-- API Status -->
+            <div class="status-card" id="api-status">
+                <div class="status-indicator"></div>
+                <span class="status-text">Checking system status...</span>
+            </div>
+
+            <!-- Design Form -->
+            <div class="design-form">
+                <div class="form-section">
+                    <h3>Project Parameters</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Building Type</label>
+                            <select id="building-type" class="form-control">
+                                <option value="office">Office Building</option>
+                                <option value="school">Educational Facility</option>
+                                <option value="retail">Retail/Commercial</option>
+                                <option value="assembly">Assembly Building</option>
+                                <option value="industrial">Industrial Facility</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Jurisdiction</label>
+                            <select id="jurisdiction" class="form-control">
+                                <option value="NBC">National Building Code</option>
+                                <option value="Alberta">Alberta Building Code</option>
+                                <option value="Ontario">Ontario Building Code</option>
+                                <option value="BC">BC Building Code</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Occupancy Load</label>
+                            <input type="number" id="occupancy" class="form-control" value="200" min="1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Accessibility Level</label>
+                            <select id="accessibility" class="form-control">
+                                <option value="basic">Basic Compliance</option>
+                                <option value="enhanced">Enhanced Accessibility</option>
+                                <option value="universal">Universal Design</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Room Length (m)</label>
+                            <input type="number" id="room-length" class="form-control" value="12.0" step="0.1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Room Width (m)</label>
+                            <input type="number" id="room-width" class="form-control" value="8.0" step="0.1">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-primary btn-large" onclick="generateDesign()">
+                        🎨 Generate Design
+                    </button>
+                    <button class="btn btn-secondary" onclick="validateForm()">
+                        ✅ Validate Parameters
+                    </button>
+                    <button class="btn btn-outline" onclick="testAPI()">
+                        🔧 Test API
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading-state" id="loading" style="display: none;">
+                <div class="spinner"></div>
+                <h3>Generating Your Design...</h3>
+                <p>Calculating compliance requirements and generating layout...</p>
+            </div>
+
+            <!-- Results -->
+            <div id="results" class="results-section"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>🏗️ Consolidata</h3>
+                    <p>Professional washroom design and building code compliance for Canadian jurisdictions.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Features</h4>
+                    <ul>
+                        <li>Building Code Compliance</li>
+                        <li>Layout Generation</li>
+                        <li>AutoCAD Export</li>
+                        <li>Accessibility Standards</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li>Documentation</li>
+                        <li>API Reference</li>
+                        <li>Code Updates</li>
+                        <li>Technical Support</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Consolidata. Professional washroom design solutions.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consolidata System Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f9fafb;
+        }
+        .test-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 0.5rem;
+            font-size: 1rem;
+        }
+        .btn:hover {
+            background: #059669;
+        }
+        .status {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .success { background: #f0fdf4; border: 2px solid #10b981; color: #065f46; }
+        .error { background: #fef2f2; border: 2px solid #ef4444; color: #991b1b; }
+        .info { background: #eff6ff; border: 2px solid #3b82f6; color: #1e40af; }
+    </style>
+</head>
+<body>
+    <h1>🏗️ Consolidata System Test</h1>
+    
+    <div class="test-card">
+        <h2>🔧 System Status</h2>
+        <div id="status" class="status info">Checking system status...</div>
+        <button class="btn" onclick="checkSystem()">🔄 Refresh Status</button>
+    </div>
+    
+    <div class="test-card">
+        <h2>🧪 API Tests</h2>
+        <button class="btn" onclick="testHealth()">❤️ Health Check</button>
+        <button class="btn" onclick="testFixtures()">🚽 Test Fixtures</button>
+        <button class="btn" onclick="testComplete()">🎨 Test Complete Analysis</button>
+        <div id="test-results"></div>
+    </div>
+    
+    <div class="test-card">
+        <h2>🌐 Quick Links</h2>
+        <a href="../frontend/index.html" class="btn">🏗️ Main Consolidata Interface</a>
+        <a href="http://localhost:5000/api/docs" class="btn" target="_blank">📖 API Documentation</a>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000/api';
+        
+        async function checkSystem() {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = 'status info';
+            statusDiv.textContent = 'Checking system status...';
+            
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                
+                if (data.status === 'healthy') {
+                    statusDiv.className = 'status success';
+                    statusDiv.innerHTML = `
+                        ✅ System is healthy!<br>
+                        <strong>Service:</strong> ${data.service}<br>
+                        <strong>Version:</strong> ${data.version}<br>
+                        <strong>Time:</strong> ${new Date(data.timestamp).toLocaleString()}
+                    `;
+                } else {
+                    throw new Error('API not healthy');
+                }
+            } catch (error) {
+                statusDiv.className = 'status error';
+                statusDiv.innerHTML = `
+                    ❌ System offline<br>
+                    <strong>Error:</strong> ${error.message}<br>
+                    <strong>Solution:</strong> Run 'python start.py' to start the system
+                `;
+            }
+        }
+        
+        async function testHealth() {
+            showResult('Testing health endpoint...', 'info');
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                showResult(`✅ Health check passed: ${data.service}`, 'success');
+            } catch (error) {
+                showResult(`❌ Health check failed: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testFixtures() {
+            showResult('Testing fixture calculation...', 'info');
+            try {
+                const testData = {
+                    occupancy_load: 100,
+                    building_type: 'office',
+                    jurisdiction: 'NBC',
+                    accessibility_level: 'basic'
+                };
+                
+                const response = await fetch(`${API_BASE}/calculate-fixtures`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    const fixtures = result.fixture_requirements;
+                    showResult(`✅ Fixture calculation successful:<br>
+                        Male WCs: ${fixtures.water_closets_male}, 
+                        Female WCs: ${fixtures.water_closets_female}, 
+                        Urinals: ${fixtures.urinals}, 
+                        Lavatories: ${fixtures.lavatories}`, 'success');
+                } else {
+                    showResult(`❌ Fixture calculation failed: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showResult(`❌ Fixture test failed: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testComplete() {
+            showResult('Testing complete analysis...', 'info');
+            try {
+                const testData = {
+                    occupancy_load: 150,
+                    building_type: 'office',
+                    jurisdiction: 'NBC',
+                    accessibility_level: 'enhanced',
+                    room_dimensions: { length: 12, width: 8, height: 3 }
+                };
+                
+                const response = await fetch(`${API_BASE}/complete-analysis`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    const report = result.report;
+                    showResult(`✅ Complete analysis successful:<br>
+                        Compliance Score: ${report.compliance_score.toFixed(1)}%<br>
+                        Layout Elements: ${report.layout_elements.length}<br>
+                        Checklist Items: ${report.compliance_checklist.length}`, 'success');
+                } else {
+                    showResult(`❌ Complete analysis failed: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showResult(`❌ Complete analysis test failed: ${error.message}`, 'error');
+            }
+        }
+        
+        function showResult(message, type) {
+            const resultsDiv = document.getElementById('test-results');
+            const resultElement = document.createElement('div');
+            resultElement.className = `status ${type}`;
+            resultElement.innerHTML = message;
+            resultsDiv.appendChild(resultElement);
+            
+            // Auto-remove after 10 seconds
+            setTimeout(() => {
+                if (resultElement.parentElement) {
+                    resultElement.remove();
+                }
+            }, 10000);
+        }
+        
+        // Check system on page load
+        window.addEventListener('load', checkSystem);
+    </script>
+</body>
+</html> 

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consolidata - Washroom Design System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 3rem;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+        .welcome-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+        }
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        .title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            color: #6b7280;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0.5rem;
+            transition: all 0.2s;
+        }
+        .btn:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: #10b981;
+            border: 2px solid #10b981;
+        }
+        .btn-secondary:hover {
+            background: #10b981;
+            color: white;
+        }
+        .status {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #f0fdf4;
+            border: 2px solid #10b981;
+            border-radius: 8px;
+            color: #065f46;
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-card">
+        <div class="logo">🏗️</div>
+        <h1 class="title">Consolidata</h1>
+        <p class="subtitle">Professional Washroom Design & Code Compliance</p>
+        
+        <div>
+            <a href="frontend/index.html" class="btn">🚀 Launch Application</a>
+            <a href="tests/test_system.html" class="btn btn-secondary">🧪 System Test</a>
+        </div>
+        
+        <div class="status">
+            <strong>✅ System Ready</strong><br>
+            Welcome to the Consolidata washroom design system. Click "Launch Application" to start designing compliant washroom layouts.
+        </div>
+        
+        <div style="margin-top: 2rem; font-size: 0.9rem; color: #6b7280;">
+            <p><strong>Quick Links:</strong></p>
+            <a href="http://localhost:5000/api/docs" target="_blank" style="color: #10b981;">📖 API Documentation</a> |
+            <a href="README.md" style="color: #10b981;">📚 User Guide</a>
+        </div>
+    </div>
+
+    <script>
+        // Auto-redirect after 3 seconds if user doesn't click
+        setTimeout(() => {
+            if (confirm('Auto-redirect to main application?')) {
+                window.location.href = 'frontend/index.html';
+            }
+        }, 5000);
+    </script>
+</body>
+</html> 

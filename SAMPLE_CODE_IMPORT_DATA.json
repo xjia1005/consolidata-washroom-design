@@ -1,0 +1,103 @@
+{
+  "nbc_sample": {
+    "jurisdiction": "NBC",
+    "version": "2020",
+    "import_date": "2024-12-28",
+    "sections": [
+      {
+        "identifier": "3.7.2",
+        "title": "Water Closets and Urinals",
+        "content": "Except as permitted by Articles 3.7.2.3. to 3.7.2.6., the minimum number of water closets required for each sex in a building shall be determined in accordance with Table 3.7.2.1.",
+        "level": 2,
+        "building_types": ["office", "school", "assembly", "retail"]
+      },
+      {
+        "identifier": "3.8.3.12",
+        "title": "Water closets in barrier-free washrooms",
+        "content": "At least one water closet in a barrier-free washroom shall conform to Article 3.8.3.11.",
+        "level": 3,
+        "building_types": ["*"]
+      }
+    ],
+    "rules": [
+      {
+        "rule_id": "TOILET_COUNT_OFFICE_MALE",
+        "rule_type": "fixture_count",
+        "rule_category": "male_toilet",
+        "building_types": ["office"],
+        "condition_logic": {
+          "occupancy_min": 1,
+          "gender": "male"
+        },
+        "calculation_formula": {
+          "formula_id": 1,
+          "expression": "CEIL(male_occupancy / divisor)",
+          "constants": {
+            "office": {"divisor": 75},
+            "default_divisor": 75
+          }
+        },
+        "description": "Male toilet requirements for office buildings - 1 per 75 male occupants",
+        "priority": 80,
+        "code_section": "3.7.2"
+      },
+      {
+        "rule_id": "ACCESSIBLE_TOILET_COUNT",
+        "rule_type": "fixture_count", 
+        "rule_category": "accessible_toilet",
+        "building_types": ["*"],
+        "condition_logic": {
+          "occupancy_min": 1
+        },
+        "calculation_formula": {
+          "formula_id": 2,
+          "expression": "MAX(1, CEIL(total_toilets * 0.05))",
+          "constants": {
+            "min_accessible": 1,
+            "percentage": 0.05
+          }
+        },
+        "description": "Accessible toilet requirements - minimum 1, or 5% of total toilets",
+        "priority": 90,
+        "code_section": "3.8.3.12"
+      }
+    ]
+  },
+  "alberta_sample": {
+    "jurisdiction": "AB", 
+    "version": "2019",
+    "import_date": "2024-12-28",
+    "notes": "Alberta amendments to NBC 2015",
+    "jurisdiction_overrides": [
+      {
+        "base_rule": "NBC_TOILET_COUNT_OFFICE_MALE",
+        "override_type": "formula_constant", 
+        "override_data": {
+          "office": {"divisor": 70}
+        },
+        "override_reason": "Alberta amendment for enhanced worker facilities"
+      }
+    ]
+  },
+  "ibc_sample": {
+    "jurisdiction": "IBC",
+    "version": "2021", 
+    "country": "USA",
+    "rules": [
+      {
+        "rule_id": "TOILET_COUNT_OFFICE_US",
+        "rule_type": "fixture_count",
+        "rule_category": "toilet_total",
+        "building_types": ["office"],
+        "calculation_formula": {
+          "expression": "TIERED_SYSTEM",
+          "constants": {
+            "office_1_15": {"male": 1, "female": 1},
+            "office_16_35": {"male": 1, "female": 2}
+          }
+        },
+        "description": "US IBC office toilet requirements - tiered system"
+      }
+    ]
+  }
+} 

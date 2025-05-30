@@ -1,0 +1,197 @@
+{
+  "nbc_exact_text": {
+    "jurisdiction": "NBC",
+    "version": "2020",
+    "verification": {
+      "extracted_by": "Building Code Specialist",
+      "verified_by": "Licensed Professional Engineer",
+      "extraction_date": "2024-12-28",
+      "source_verification": "Official NRC Canada website"
+    },
+    "sections": [
+      {
+        "identifier": "3.7.2",
+        "title": "Water Closets and Urinals",
+        "exact_text_en": "Except as permitted by Articles 3.7.2.3. to 3.7.2.6., the minimum number of water closets required for each sex in a building shall be determined in accordance with Table 3.7.2.1.",
+        "exact_text_fr": "Sauf dans les cas prévus aux articles 3.7.2.3. à 3.7.2.6., le nombre minimal de cuvettes de cabinet d'aisances exigé pour chaque sexe dans un bâtiment doit être déterminé conformément au tableau 3.7.2.1.",
+        "source_document": "National Building Code of Canada 2020",
+        "page_number": 287,
+        "official_url": "https://nrc.canada.ca/en/certifications-evaluations-standards/codes-canada/codes-canada-publications/national-building-code-canada-2020",
+        "extraction_method": "manual_copy",
+        "building_types": ["office", "school", "assembly", "retail"],
+        "legal_status": "active",
+        "text_fragments": [
+          {
+            "type": "requirement",
+            "sequence": 1,
+            "exact_text_en": "the minimum number of water closets required for each sex in a building shall be determined in accordance with Table 3.7.2.1",
+            "exact_text_fr": "le nombre minimal de cuvettes de cabinet d'aisances exigé pour chaque sexe dans un bâtiment doit être déterminé conformément au tableau 3.7.2.1",
+            "for_calculation": true,
+            "for_compliance": true,
+            "mandatory": true,
+            "has_numbers": false
+          },
+          {
+            "type": "exception",
+            "sequence": 2,
+            "exact_text_en": "Except as permitted by Articles 3.7.2.3. to 3.7.2.6.",
+            "exact_text_fr": "Sauf dans les cas prévus aux articles 3.7.2.3. à 3.7.2.6.",
+            "for_calculation": false,
+            "for_compliance": true,
+            "mandatory": false,
+            "has_numbers": true
+          }
+        ]
+      },
+      {
+        "identifier": "3.8.3.12",
+        "title": "Water closets in barrier-free washrooms",
+        "exact_text_en": "At least one water closet in a barrier-free washroom shall conform to Article 3.8.3.11.",
+        "exact_text_fr": "Au moins une cuvette de cabinet d'aisances dans une salle de toilettes sans obstacles doit être conforme à l'article 3.8.3.11.",
+        "source_document": "National Building Code of Canada 2020",
+        "page_number": 412,
+        "official_url": "https://nrc.canada.ca/en/certifications-evaluations-standards/codes-canada/codes-canada-publications/national-building-code-canada-2020",
+        "extraction_method": "manual_copy",
+        "building_types": ["*"],
+        "legal_status": "active",
+        "text_fragments": [
+          {
+            "type": "requirement",
+            "sequence": 1,
+            "exact_text_en": "At least one water closet in a barrier-free washroom shall conform to Article 3.8.3.11",
+            "exact_text_fr": "Au moins une cuvette de cabinet d'aisances dans une salle de toilettes sans obstacles doit être conforme à l'article 3.8.3.11",
+            "for_calculation": true,
+            "for_compliance": true,
+            "mandatory": true,
+            "has_numbers": true
+          }
+        ]
+      },
+      {
+        "identifier": "Table 3.7.2.1",
+        "title": "Minimum Number of Water Closets",
+        "exact_text_en": "Office Buildings: Males - 1 per 75 persons or part thereof; Females - 1 per 40 persons or part thereof",
+        "exact_text_fr": "Bâtiments de bureaux: Hommes - 1 par 75 personnes ou fraction de ce nombre; Femmes - 1 par 40 personnes ou fraction de ce nombre",
+        "source_document": "National Building Code of Canada 2020",
+        "page_number": 288,
+        "official_url": "https://nrc.canada.ca/en/certifications-evaluations-standards/codes-canada/codes-canada-publications/national-building-code-canada-2020",
+        "extraction_method": "manual_copy",
+        "building_types": ["office"],
+        "legal_status": "active",
+        "text_fragments": [
+          {
+            "type": "table_row",
+            "sequence": 1,
+            "exact_text_en": "Males - 1 per 75 persons or part thereof",
+            "exact_text_fr": "Hommes - 1 par 75 personnes ou fraction de ce nombre",
+            "for_calculation": true,
+            "for_compliance": true,
+            "mandatory": true,
+            "has_numbers": true
+          },
+          {
+            "type": "table_row",
+            "sequence": 2,
+            "exact_text_en": "Females - 1 per 40 persons or part thereof",
+            "exact_text_fr": "Femmes - 1 par 40 personnes ou fraction de ce nombre",
+            "for_calculation": true,
+            "for_compliance": true,
+            "mandatory": true,
+            "has_numbers": true
+          }
+        ]
+      }
+    ]
+  },
+  "alberta_exact_text": {
+    "jurisdiction": "AB",
+    "version": "2019",
+    "verification": {
+      "extracted_by": "Alberta Building Code Specialist",
+      "verified_by": "P.Eng Alberta",
+      "extraction_date": "2024-12-28",
+      "source_verification": "Official Alberta Municipal Affairs website"
+    },
+    "sections": [
+      {
+        "identifier": "3.7.2.AB",
+        "title": "Alberta Amendment - Enhanced Worker Facilities",
+        "exact_text_en": "For industrial buildings in cold climate zones, the fixture count shall be increased by providing 1 water closet per 70 males (instead of 75) to accommodate enhanced worker welfare requirements during extreme weather conditions.",
+        "source_document": "Alberta Building Code 2019 - Amendment to NBC",
+        "page_number": 45,
+        "official_url": "https://www.alberta.ca/building-code",
+        "extraction_method": "manual_copy",
+        "building_types": ["office", "industrial"],
+        "legal_status": "active",
+        "amendment_to": "NBC 3.7.2",
+        "text_fragments": [
+          {
+            "type": "amendment",
+            "sequence": 1,
+            "exact_text_en": "1 water closet per 70 males (instead of 75)",
+            "for_calculation": true,
+            "for_compliance": true,
+            "mandatory": true,
+            "has_numbers": true
+          }
+        ]
+      }
+    ]
+  },
+  "ibc_exact_text": {
+    "jurisdiction": "IBC",
+    "version": "2021",
+    "verification": {
+      "extracted_by": "ICC Code Specialist",
+      "verified_by": "Licensed Architect",
+      "extraction_date": "2024-12-28",
+      "source_verification": "Official ICC Publications"
+    },
+    "sections": [
+      {
+        "identifier": "2902.1",
+        "title": "Minimum number of fixtures",
+        "exact_text_en": "Plumbing fixtures shall be provided in the minimum number as shown in Table 2902.1 based on the actual use of the building or space.",
+        "source_document": "International Building Code 2021",
+        "page_number": "29-3",
+        "official_url": "https://codes.iccsafe.org/content/IBC2021P1",
+        "extraction_method": "manual_copy",
+        "building_types": ["office", "assembly", "retail"],
+        "legal_status": "active",
+        "text_fragments": [
+          {
+            "type": "requirement",
+            "sequence": 1,
+            "exact_text_en": "Plumbing fixtures shall be provided in the minimum number as shown in Table 2902.1",
+            "for_calculation": true,
+            "for_compliance": true,
+            "mandatory": true,
+            "has_numbers": false
+          }
+        ]
+      },
+      {
+        "identifier": "Table 2902.1",
+        "title": "Minimum Number of Required Plumbing Fixtures",
+        "exact_text_en": "Business (B): Male - 1 water closet per 25 for the first 50 and 1 per 50 for the remainder exceeding 50; Female - 1 water closet per 25 for the first 50 and 1 per 50 for the remainder exceeding 50",
+        "source_document": "International Building Code 2021",
+        "page_number": "29-4",
+        "official_url": "https://codes.iccsafe.org/content/IBC2021P1",
+        "extraction_method": "manual_copy",
+        "building_types": ["office"],
+        "legal_status": "active",
+        "text_fragments": [
+          {
+            "type": "table_calculation",
+            "sequence": 1,
+            "exact_text_en": "1 water closet per 25 for the first 50 and 1 per 50 for the remainder exceeding 50",
+            "for_calculation": true,
+            "for_compliance": true,
+            "mandatory": true,
+            "has_numbers": true
+          }
+        ]
+      }
+    ]
+  }
+} 
