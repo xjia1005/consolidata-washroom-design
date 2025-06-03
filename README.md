@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🏗️ Consolidata - Washroom Design & Code Compliance
 
 **Professional building code compliance and layout generation for Canadian jurisdictions**
@@ -312,3 +313,6 @@ For technical support or questions about building code compliance, please refer 
 *Built with ❤️ for architects, engineers, and designers.*
 
 **🚀 Ready to deploy?** Choose your platform above and go live in minutes! 
+=======
+# consolidata-washroom-design
+>>>>>>> 46ddbca209c2107487b0c93bd9fcb9dadd4c73d5

@@ -4,7 +4,7 @@ Consolidata Washroom Design - Backend API Server
 Building Code Compliance and Layout Generation System
 """
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory, send_file
 from flask_cors import CORS
 import json
 import sqlite3
@@ -92,10 +92,12 @@ class BuildingCodeAPI:
             ('NBC', 'office', '56-80', 2, 3, 2, 3, 1, 'NBC 3.7.4.2', 'basic'),
             ('NBC', 'office', '81-110', 3, 3, 2, 4, 2, 'NBC 3.7.4.2', 'basic'),
             
-            # Alberta - Office Buildings
-            ('Alberta', 'office', '1-15', 1, 1, 1, 1, 1, 'ABC 3.7.4.2', 'basic'),
-            ('Alberta', 'office', '16-35', 1, 2, 1, 2, 1, 'ABC 3.7.4.2', 'basic'),
-            ('Alberta', 'office', '36-55', 2, 2, 1, 2, 1, 'ABC 3.7.4.2', 'basic'),
+            # Alberta - Office Buildings (Different requirements)
+            ('Alberta', 'office', '1-15', 1, 1, 1, 1, 1, 'Alberta Building Code 3.7.4.2', 'basic'),
+            ('Alberta', 'office', '16-35', 1, 2, 1, 2, 1, 'Alberta Building Code 3.7.4.2', 'basic'),
+            ('Alberta', 'office', '36-55', 2, 3, 1, 3, 1, 'Alberta Building Code 3.7.4.2', 'basic'),
+            ('Alberta', 'office', '56-80', 3, 3, 2, 3, 2, 'Alberta Building Code 3.7.4.2', 'basic'),
+            ('Alberta', 'office', '81-110', 3, 4, 2, 4, 2, 'Alberta Building Code 3.7.4.2', 'basic'),
             
             # Ontario - Office Buildings
             ('Ontario', 'office', '1-15', 1, 1, 1, 1, 1, 'OBC 3.7.4.2', 'basic'),
@@ -432,10 +434,26 @@ def complete_analysis():
     try:
         data = request.get_json()
         
-        # Extract parameters
-        occupancy_load = data.get('occupancy_load', 50)
-        building_type = data.get('building_type', 'office')
-        jurisdiction = data.get('jurisdiction', 'NBC')
+        # Validate input data
+        if not data:
+            return jsonify({
+                'success': False,
+                'error': 'No input data provided'
+            }), 400
+        
+        # Extract parameters with validation
+        occupancy_load = data.get('occupancy_load')
+        building_type = data.get('building_type')
+        jurisdiction = data.get('jurisdiction')
+        
+        # Basic validation
+        if not occupancy_load or not building_type or not jurisdiction:
+            return jsonify({
+                'success': False,
+                'error': 'Missing required parameters: occupancy_load, building_type, jurisdiction'
+            }), 400
+        
+        # Set defaults for optional parameters
         accessibility_level = data.get('accessibility_level', 'basic')
         room_dimensions = data.get('room_dimensions', {'length': 10, 'width': 8, 'height': 3})
         
@@ -604,6 +622,25 @@ def enhanced_analysis():
             "error": f"Enhanced analysis failed: {str(e)}",
             "status": "error"
         }), 500
+
+# Frontend serving routes
+@app.route('/')
+def index():
+    """Serve the main frontend page"""
+    frontend_path = os.path.join(os.path.dirname(__file__), '..', 'frontend')
+    return send_from_directory(frontend_path, 'index.html')
+
+@app.route('/frontend/<path:filename>')
+def serve_frontend(filename):
+    """Serve frontend static files"""
+    frontend_path = os.path.join(os.path.dirname(__file__), '..', 'frontend')
+    return send_from_directory(frontend_path, filename)
+
+@app.route('/frontend/')
+def frontend_index():
+    """Serve frontend index when accessing /frontend/"""
+    frontend_path = os.path.join(os.path.dirname(__file__), '..', 'frontend')
+    return send_from_directory(frontend_path, 'index.html')
 
 if __name__ == '__main__':
     print("🏗️ Starting Consolidata Building Code Compliance API...")
