@@ -349,7 +349,8 @@ def health_check():
         'status': 'healthy',
         'timestamp': datetime.now().isoformat(),
         'version': '1.0.0',
-        'service': 'Consolidata Building Code API'
+        'service': 'CodeCompliance Pro API',
+        'description': 'Professional Building Code Analysis & CAD Integration'
     })
 
 @app.route('/api/calculate-fixtures', methods=['POST'])
@@ -514,9 +515,23 @@ def complete_analysis():
 def api_documentation():
     """API documentation endpoint"""
     docs = {
-        'title': 'Consolidata Building Code Compliance API',
+        'title': 'CodeCompliance Pro API',
         'version': '1.0.0',
-        'description': 'Professional washroom design and building code compliance system',
+        'description': 'Professional building code compliance and CAD-ready layout generation for architects and PME engineers',
+        'tagline': 'From Code Analysis to CAD-Ready Designs',
+        'target_users': [
+            'Architects',
+            'PME Engineers (Plumbing, Mechanical, Electrical)',
+            'Design Firms',
+            'Building Professionals'
+        ],
+        'features': [
+            'Multi-jurisdiction building code support',
+            'Professional compliance checklists with clause numbers',
+            'CAD-ready 2D layout generation',
+            'Real-time compliance checking',
+            'Export capabilities for AutoCAD/Revit'
+        ],
         'endpoints': {
             '/api/health': {
                 'method': 'GET',
@@ -529,20 +544,31 @@ def api_documentation():
             },
             '/api/generate-layout': {
                 'method': 'POST',
-                'description': 'Generate 2D layout',
+                'description': 'Generate CAD-ready 2D layout',
                 'parameters': ['fixture_requirements', 'room_dimensions', 'accessibility_level']
             },
             '/api/generate-compliance-checklist': {
                 'method': 'POST',
-                'description': 'Generate compliance checklist',
+                'description': 'Generate professional compliance checklist',
                 'parameters': ['building_type', 'jurisdiction', 'accessibility_level']
             },
             '/api/complete-analysis': {
                 'method': 'POST',
-                'description': 'Complete washroom design analysis',
+                'description': 'Complete professional building code analysis',
+                'parameters': ['occupancy_load', 'building_type', 'jurisdiction', 'accessibility_level', 'room_dimensions']
+            },
+            '/api/enhanced-analysis': {
+                'method': 'POST',
+                'description': 'Enhanced 7-step professional analysis with detailed traceability',
                 'parameters': ['occupancy_load', 'building_type', 'jurisdiction', 'accessibility_level', 'room_dimensions']
             }
-        }
+        },
+        'jurisdictions_supported': [
+            'National Building Code (NBC)',
+            'Alberta Building Code',
+            'Ontario Building Code',
+            'BC Building Code'
+        ]
     }
     
     return jsonify(docs)
@@ -643,7 +669,9 @@ def frontend_index():
     return send_from_directory(frontend_path, 'index.html')
 
 if __name__ == '__main__':
-    print("🏗️ Starting Consolidata Building Code Compliance API...")
+    print("🏗️ Starting CodeCompliance Pro API Server...")
+    print("📋 Professional Building Code Analysis & CAD Integration")
+    print("🎯 From Code Analysis to CAD-Ready Designs")
     print("📚 Database initialized")
     
     # Get port from environment variable or default to 5000
@@ -652,6 +680,7 @@ if __name__ == '__main__':
     
     print(f"🌐 Server starting on http://{host}:{port}")
     print(f"📖 API Documentation: http://{host}:{port}/api/docs")
+    print(f"🎨 Professional Interface: http://{host}:{port}/")
     
     # Use production settings if deployed
     debug = os.environ.get('FLASK_ENV') != 'production'
