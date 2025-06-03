@@ -659,11 +659,30 @@ def index():
     frontend_path = os.path.join(os.path.dirname(__file__), '..', 'frontend')
     return send_from_directory(frontend_path, 'index.html')
 
+@app.route('/styles.css')
+def serve_css():
+    """Serve the CSS file"""
+    frontend_path = os.path.join(os.path.dirname(__file__), '..', 'frontend')
+    return send_from_directory(frontend_path, 'styles.css', mimetype='text/css')
+
+@app.route('/script.js')
+def serve_js():
+    """Serve the JavaScript file"""
+    frontend_path = os.path.join(os.path.dirname(__file__), '..', 'frontend')
+    return send_from_directory(frontend_path, 'script.js', mimetype='application/javascript')
+
 @app.route('/frontend/<path:filename>')
 def serve_frontend(filename):
     """Serve frontend static files"""
     frontend_path = os.path.join(os.path.dirname(__file__), '..', 'frontend')
-    return send_from_directory(frontend_path, filename)
+    
+    # Set proper MIME types
+    if filename.endswith('.css'):
+        return send_from_directory(frontend_path, filename, mimetype='text/css')
+    elif filename.endswith('.js'):
+        return send_from_directory(frontend_path, filename, mimetype='application/javascript')
+    else:
+        return send_from_directory(frontend_path, filename)
 
 @app.route('/frontend/')
 def frontend_index():
