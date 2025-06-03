@@ -11,6 +11,7 @@ import sqlite3
 import os
 from datetime import datetime
 import logging
+import sys
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -23,18 +24,34 @@ logger = logging.getLogger(__name__)
 # Database path
 DB_PATH = os.path.join(os.path.dirname(__file__), '..', 'database', 'building_codes.db')
 
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+from enhanced_logic_engine import EnhancedBuildingCodeEngine
+
 class BuildingCodeAPI:
-    def __init__(self):
+    def __init__(self, db_path="database/building_codes.db"):
+        self.db_path = db_path
+        # Remove shared connection - use per-request connections
+        
+        # Initialize enhanced logic engine
+        self.enhanced_engine = EnhancedBuildingCodeEngine(db_path)
+        
         self.init_database()
     
     def init_database(self):
-        """Initialize the building codes database"""
+        """Initialize database with enhanced schema and data"""
         try:
+            # Use temporary connection for initialization only
+            connection = sqlite3.connect(self.db_path, check_same_thread=False)
+            connection.row_factory = sqlite3.Row
+            
+            # Initialize enhanced database
+            self.enhanced_engine.initialize_enhanced_database()
+            
             # Ensure database directory exists
             os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
             
-            conn = sqlite3.connect(DB_PATH)
-            cursor = conn.cursor()
+            cursor = connection.cursor()
             
             # Create tables if they don't exist
             cursor.execute('''
@@ -58,12 +75,12 @@ class BuildingCodeAPI:
             if cursor.fetchone()[0] == 0:
                 self.populate_sample_data(cursor)
             
-            conn.commit()
-            conn.close()
+            connection.commit()
+            connection.close()  # Close initialization connection
             logger.info("Database initialized successfully")
             
         except Exception as e:
-            logger.error(f"Database initialization error: {e}")
+            logger.error(f"Database initialization failed: {e}")
     
     def populate_sample_data(self, cursor):
         """Populate database with sample building code data"""
@@ -120,7 +137,7 @@ class BuildingCodeAPI:
     def get_fixture_requirements(self, occupancy_load, building_type, jurisdiction, accessibility_level='basic'):
         """Calculate fixture requirements based on occupancy and building type"""
         try:
-            conn = sqlite3.connect(DB_PATH)
+            conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
             
             # Find matching code requirements
@@ -511,6 +528,82 @@ def api_documentation():
     }
     
     return jsonify(docs)
+
+@app.route('/api/enhanced-analysis', methods=['POST'])
+def enhanced_analysis():
+    """
+    🎯 Enhanced building code analysis with high-accuracy workflow
+    Implements the complete 7-step process for maximum compliance coverage
+    """
+    try:
+        data = request.get_json()
+        
+        if not data:
+            return jsonify({
+                "error": "No input data provided",
+                "status": "error"
+            }), 400
+        
+        logger.info("🔄 Starting enhanced analysis workflow...")
+        
+        # Execute the complete 7-step workflow
+        workflow_results = api.enhanced_engine.process_complete_workflow(data)
+        
+        if "error" in workflow_results:
+            return jsonify({
+                "error": workflow_results["error"],
+                "status": "error"
+            }), 500
+        
+        # Format response for frontend
+        response = {
+            "status": "success",
+            "workflow_id": workflow_results["workflow_id"],
+            "timestamp": workflow_results["timestamp"],
+            "analysis_type": "enhanced_high_accuracy",
+            
+            # Main results
+            "compliance_checklist": workflow_results["final_results"]["compliance_checklist"],
+            "layout_design": workflow_results["final_results"]["layout_design"],
+            
+            # Validation and traceability
+            "validation_summary": workflow_results["validation"],
+            "traceability_complete": workflow_results["final_results"]["traceability_complete"],
+            
+            # Workflow details (for debugging/transparency)
+            "workflow_steps": {
+                step_key: {
+                    "name": step_data["name"],
+                    "status": step_data["status"],
+                    "summary": {
+                        "rules_found": step_data.get("rules_found"),
+                        "components_required": len(step_data.get("data", {}).get("required_components", [])) if step_key == "step_3" else None,
+                        "clauses_found": step_data.get("data", {}).get("total_clauses") if step_key == "step_4" else None,
+                        "coverage_score": step_data.get("data", {}).get("coverage_map", {}).get("coverage_percentage") if step_key == "step_5" else None
+                    }
+                }
+                for step_key, step_data in workflow_results["steps"].items()
+            },
+            
+            # Summary metrics
+            "summary": {
+                "total_checklist_items": workflow_results["final_results"]["compliance_checklist"]["project_info"]["total_items"],
+                "critical_items": workflow_results["final_results"]["compliance_checklist"]["project_info"]["critical_items"],
+                "coverage_percentage": workflow_results["validation"]["coverage_map"]["coverage_percentage"],
+                "layout_efficiency": workflow_results["final_results"]["layout_design"]["layout_efficiency"],
+                "compliance_score": workflow_results["final_results"]["layout_design"]["compliance_score"]
+            }
+        }
+        
+        logger.info("✅ Enhanced analysis completed successfully")
+        return jsonify(response)
+        
+    except Exception as e:
+        logger.error(f"Enhanced analysis failed: {e}")
+        return jsonify({
+            "error": f"Enhanced analysis failed: {str(e)}",
+            "status": "error"
+        }), 500
 
 if __name__ == '__main__':
     print("🏗️ Starting Consolidata Building Code Compliance API...")
