@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Consolidata Washroom Design - Backend API Server
-Building Code Compliance and Layout Generation System
+BCode Pro - Backend API Server
+Building Code Compliance and Layout Generation System with User Authentication
 """
 
-from flask import Flask, request, jsonify, send_from_directory, send_file
+from flask import Flask, request, jsonify, send_from_directory, send_file, session, redirect, url_for
 from flask_cors import CORS
 import json
 import sqlite3
@@ -12,10 +12,12 @@ import os
 from datetime import datetime
 import logging
 import sys
+from functools import wraps
 
 # Initialize Flask app
 app = Flask(__name__)
-CORS(app)  # Enable CORS for frontend communication
+app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production')
+CORS(app, supports_credentials=True)  # Enable CORS with credentials for sessions
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -27,6 +29,44 @@ DB_PATH = os.path.join(os.path.dirname(__file__), '..', 'database', 'building_co
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from enhanced_logic_engine import EnhancedBuildingCodeEngine
+from user_auth_system import UserAuthSystem, PRICING_PLANS
+
+# Authentication decorator
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            return jsonify({'success': False, 'error': 'Authentication required'}), 401
+        return f(*args, **kwargs)
+    return decorated_function
+
+def subscription_required(analysis_type='standard'):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if 'user_id' not in session:
+                return jsonify({'success': False, 'error': 'Authentication required'}), 401
+            
+            user_id = session['user_id']
+            if not auth_system.can_use_service(user_id, analysis_type):
+                subscription = auth_system.get_user_subscription(user_id)
+                if subscription['plan_type'] == 'free':
+                    return jsonify({
+                        'success': False, 
+                        'error': 'Free trial limit reached',
+                        'upgrade_required': True,
+                        'free_projects_remaining': subscription['free_projects_remaining']
+                    }), 402
+                else:
+                    return jsonify({
+                        'success': False, 
+                        'error': 'Subscription required',
+                        'upgrade_required': True
+                    }), 402
+            
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
 
 class BuildingCodeAPI:
     def __init__(self, db_path="database/building_codes.db"):
@@ -338,25 +378,157 @@ class BuildingCodeAPI:
         
         return checklist
 
-# Initialize API
+# Initialize API and Auth System
 api = BuildingCodeAPI()
+auth_system = UserAuthSystem()
 
-# API Routes
+# Authentication Routes
+@app.route('/api/register', methods=['POST'])
+def register():
+    """User registration endpoint"""
+    try:
+        data = request.get_json()
+        
+        # Extract registration data
+        email = data.get('email')
+        password = data.get('password')
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
+        phone = data.get('phone')
+        company = data.get('company')
+        profession = data.get('profession')
+        selected_plan = data.get('selected_plan', 'free')
+        
+        # Register user
+        result = auth_system.register_user(
+            email=email,
+            password=password,
+            first_name=first_name,
+            last_name=last_name,
+            phone=phone,
+            company=company,
+            profession=profession
+        )
+        
+        if result['success']:
+            # Auto-login after registration
+            session['user_id'] = result['user_id']
+            session['email'] = email
+            session['first_name'] = first_name
+            session['last_name'] = last_name
+            
+            # If paid plan selected, create checkout session
+            if selected_plan != 'free':
+                checkout_result = auth_system.create_stripe_checkout_session(
+                    result['user_id'], selected_plan
+                )
+                if checkout_result['success']:
+                    result['checkout_url'] = checkout_result['checkout_url']
+        
+        return jsonify(result)
+        
+    except Exception as e:
+        logger.error(f"Registration error: {e}")
+        return jsonify({'success': False, 'error': 'Registration failed'}), 500
+
+@app.route('/api/login', methods=['POST'])
+def login():
+    """User login endpoint"""
+    try:
+        data = request.get_json()
+        email = data.get('email')
+        password = data.get('password')
+        
+        result = auth_system.login_user(email, password)
+        
+        if result['success']:
+            # Set session
+            session['user_id'] = result['user_id']
+            session['email'] = result['email']
+            session['first_name'] = result['first_name']
+            session['last_name'] = result['last_name']
+            
+            # Get subscription info
+            subscription = auth_system.get_user_subscription(result['user_id'])
+            result['subscription'] = subscription
+        
+        return jsonify(result)
+        
+    except Exception as e:
+        logger.error(f"Login error: {e}")
+        return jsonify({'success': False, 'error': 'Login failed'}), 500
+
+@app.route('/api/logout', methods=['POST'])
+def logout():
+    """User logout endpoint"""
+    session.clear()
+    return jsonify({'success': True, 'message': 'Logged out successfully'})
+
+@app.route('/api/user/profile', methods=['GET'])
+@login_required
+def get_user_profile():
+    """Get user profile and subscription info"""
+    try:
+        user_id = session['user_id']
+        subscription = auth_system.get_user_subscription(user_id)
+        
+        return jsonify({
+            'success': True,
+            'user': {
+                'id': user_id,
+                'email': session['email'],
+                'first_name': session['first_name'],
+                'last_name': session['last_name']
+            },
+            'subscription': subscription
+        })
+        
+    except Exception as e:
+        logger.error(f"Profile error: {e}")
+        return jsonify({'success': False, 'error': 'Failed to get profile'}), 500
+
+@app.route('/api/pricing', methods=['GET'])
+def get_pricing():
+    """Get pricing plans"""
+    return jsonify({
+        'success': True,
+        'plans': PRICING_PLANS
+    })
+
+@app.route('/api/create-checkout-session', methods=['POST'])
+@login_required
+def create_checkout_session():
+    """Create Stripe checkout session"""
+    try:
+        data = request.get_json()
+        plan_type = data.get('plan_type')
+        user_id = session['user_id']
+        
+        result = auth_system.create_stripe_checkout_session(user_id, plan_type)
+        return jsonify(result)
+        
+    except Exception as e:
+        logger.error(f"Checkout error: {e}")
+        return jsonify({'success': False, 'error': 'Failed to create checkout session'}), 500
+
+# Enhanced API Routes with Authentication
 @app.route('/api/health', methods=['GET'])
 def health_check():
     """Health check endpoint"""
     return jsonify({
         'status': 'healthy',
         'timestamp': datetime.now().isoformat(),
-        'version': '1.0.0',
+        'version': '2.0.0',
         'service': 'BCode Pro API',
         'description': 'Professional Building Code Analysis & CAD Integration',
-        'website': 'bcodepro.com'
+        'website': 'bcodepro.com',
+        'features': ['user_auth', 'subscriptions', 'enhanced_analysis']
     })
 
 @app.route('/api/calculate-fixtures', methods=['POST'])
+@subscription_required('standard')
 def calculate_fixtures():
-    """Calculate fixture requirements"""
+    """Calculate fixture requirements - requires subscription"""
     try:
         data = request.get_json()
         
@@ -368,6 +540,11 @@ def calculate_fixtures():
         fixtures = api.get_fixture_requirements(
             occupancy_load, building_type, jurisdiction, accessibility_level
         )
+        
+        # Record usage
+        user_id = session['user_id']
+        project_name = data.get('project_name', f'Project_{datetime.now().strftime("%Y%m%d_%H%M%S")}')
+        auth_system.record_project_usage(user_id, project_name, 'standard')
         
         return jsonify({
             'success': True,
@@ -381,58 +558,10 @@ def calculate_fixtures():
             'error': str(e)
         }), 500
 
-@app.route('/api/generate-layout', methods=['POST'])
-def generate_layout():
-    """Generate 2D layout"""
-    try:
-        data = request.get_json()
-        
-        fixtures = data.get('fixture_requirements', {})
-        room_dimensions = data.get('room_dimensions', {'length': 10, 'width': 8, 'height': 3})
-        accessibility_level = data.get('accessibility_level', 'basic')
-        
-        layout_elements = api.generate_layout(fixtures, room_dimensions, accessibility_level)
-        
-        return jsonify({
-            'success': True,
-            'layout_elements': layout_elements,
-            'room_dimensions': room_dimensions
-        })
-        
-    except Exception as e:
-        logger.error(f"Error in generate_layout: {e}")
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        }), 500
-
-@app.route('/api/generate-compliance-checklist', methods=['POST'])
-def generate_compliance_checklist():
-    """Generate compliance checklist"""
-    try:
-        data = request.get_json()
-        
-        building_type = data.get('building_type', 'office')
-        jurisdiction = data.get('jurisdiction', 'NBC')
-        accessibility_level = data.get('accessibility_level', 'basic')
-        
-        checklist = api.generate_compliance_checklist(building_type, jurisdiction, accessibility_level)
-        
-        return jsonify({
-            'success': True,
-            'compliance_checklist': checklist
-        })
-        
-    except Exception as e:
-        logger.error(f"Error in generate_compliance_checklist: {e}")
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        }), 500
-
 @app.route('/api/complete-analysis', methods=['POST'])
+@subscription_required('standard')
 def complete_analysis():
-    """Complete washroom design analysis"""
+    """Complete washroom design analysis - requires subscription"""
     try:
         data = request.get_json()
         
@@ -483,6 +612,15 @@ def complete_analysis():
         if fixtures['total_fixtures'] > 10:
             recommendations.append("Consider separate male/female washroom areas")
         
+        # Record usage
+        user_id = session['user_id']
+        project_name = data.get('project_name', f'Analysis_{datetime.now().strftime("%Y%m%d_%H%M%S")}')
+        auth_system.record_project_usage(user_id, project_name, 'complete')
+        
+        # Check if user gets watermarked exports
+        subscription = auth_system.get_user_subscription(user_id)
+        watermarked = subscription['plan_type'] == 'free'
+        
         # Compile report
         report = {
             'fixture_requirements': fixtures,
@@ -497,12 +635,14 @@ def complete_analysis():
                 'accessibility_level': accessibility_level,
                 'room_dimensions': room_dimensions
             },
-            'generated_at': datetime.now().isoformat()
+            'generated_at': datetime.now().isoformat(),
+            'watermarked': watermarked,
+            'user_plan': subscription['plan_type']
         }
         
         return jsonify({
             'success': True,
-            'report': report
+            'analysis_report': report
         })
         
     except Exception as e:
@@ -512,200 +652,99 @@ def complete_analysis():
             'error': str(e)
         }), 500
 
-@app.route('/api/docs', methods=['GET'])
-def api_documentation():
-    """API documentation endpoint"""
-    docs = {
-        'title': 'BCode Pro API',
-        'subtitle': 'CodeCompliance Pro',
-        'version': '1.0.0',
-        'description': 'Professional building code compliance and CAD-ready layout generation for architects and PME engineers',
-        'tagline': 'From Code Analysis to CAD-Ready Designs',
-        'website': 'bcodepro.com',
-        'target_users': [
-            'Architects',
-            'PME Engineers (Plumbing, Mechanical, Electrical)',
-            'Design Firms',
-            'Building Professionals'
-        ],
-        'features': [
-            'Multi-jurisdiction building code support',
-            'Professional compliance checklists with clause numbers',
-            'CAD-ready 2D layout generation',
-            'Real-time compliance checking',
-            'Export capabilities for AutoCAD/Revit'
-        ],
-        'endpoints': {
-            '/api/health': {
-                'method': 'GET',
-                'description': 'Health check endpoint'
-            },
-            '/api/calculate-fixtures': {
-                'method': 'POST',
-                'description': 'Calculate fixture requirements',
-                'parameters': ['occupancy_load', 'building_type', 'jurisdiction', 'accessibility_level']
-            },
-            '/api/generate-layout': {
-                'method': 'POST',
-                'description': 'Generate CAD-ready 2D layout',
-                'parameters': ['fixture_requirements', 'room_dimensions', 'accessibility_level']
-            },
-            '/api/generate-compliance-checklist': {
-                'method': 'POST',
-                'description': 'Generate professional compliance checklist',
-                'parameters': ['building_type', 'jurisdiction', 'accessibility_level']
-            },
-            '/api/complete-analysis': {
-                'method': 'POST',
-                'description': 'Complete professional building code analysis',
-                'parameters': ['occupancy_load', 'building_type', 'jurisdiction', 'accessibility_level', 'room_dimensions']
-            },
-            '/api/enhanced-analysis': {
-                'method': 'POST',
-                'description': 'Enhanced 7-step professional analysis with detailed traceability',
-                'parameters': ['occupancy_load', 'building_type', 'jurisdiction', 'accessibility_level', 'room_dimensions']
-            }
-        },
-        'jurisdictions_supported': [
-            'National Building Code (NBC)',
-            'Alberta Building Code',
-            'Ontario Building Code',
-            'BC Building Code'
-        ]
-    }
-    
-    return jsonify(docs)
-
 @app.route('/api/enhanced-analysis', methods=['POST'])
+@subscription_required('enhanced')
 def enhanced_analysis():
-    """
-    🎯 Enhanced building code analysis with high-accuracy workflow
-    Implements the complete 7-step process for maximum compliance coverage
-    """
+    """Enhanced 7-step analysis - requires professional subscription"""
     try:
         data = request.get_json()
         
-        if not data:
+        # Check if user has professional subscription
+        user_id = session['user_id']
+        subscription = auth_system.get_user_subscription(user_id)
+        
+        if subscription['plan_type'] == 'free':
             return jsonify({
-                "error": "No input data provided",
-                "status": "error"
-            }), 400
+                'success': False,
+                'error': 'Enhanced analysis requires Professional subscription',
+                'upgrade_required': True
+            }), 402
         
-        logger.info("🔄 Starting enhanced analysis workflow...")
+        # Use enhanced engine
+        result = api.enhanced_engine.process_enhanced_workflow(data)
         
-        # Execute the complete 7-step workflow
-        workflow_results = api.enhanced_engine.process_complete_workflow(data)
+        # Record usage
+        project_name = data.get('project_name', f'Enhanced_{datetime.now().strftime("%Y%m%d_%H%M%S")}')
+        auth_system.record_project_usage(user_id, project_name, 'enhanced')
         
-        if "error" in workflow_results:
-            return jsonify({
-                "error": workflow_results["error"],
-                "status": "error"
-            }), 500
-        
-        # Format response for frontend
-        response = {
-            "status": "success",
-            "workflow_id": workflow_results["workflow_id"],
-            "timestamp": workflow_results["timestamp"],
-            "analysis_type": "enhanced_high_accuracy",
-            
-            # Main results
-            "compliance_checklist": workflow_results["final_results"]["compliance_checklist"],
-            "layout_design": workflow_results["final_results"]["layout_design"],
-            
-            # Validation and traceability
-            "validation_summary": workflow_results["validation"],
-            "traceability_complete": workflow_results["final_results"]["traceability_complete"],
-            
-            # Workflow details (for debugging/transparency)
-            "workflow_steps": {
-                step_key: {
-                    "name": step_data["name"],
-                    "status": step_data["status"],
-                    "summary": {
-                        "rules_found": step_data.get("rules_found"),
-                        "components_required": len(step_data.get("data", {}).get("required_components", [])) if step_key == "step_3" else None,
-                        "clauses_found": step_data.get("data", {}).get("total_clauses") if step_key == "step_4" else None,
-                        "coverage_score": step_data.get("data", {}).get("coverage_map", {}).get("coverage_percentage") if step_key == "step_5" else None
-                    }
-                }
-                for step_key, step_data in workflow_results["steps"].items()
-            },
-            
-            # Summary metrics
-            "summary": {
-                "total_checklist_items": workflow_results["final_results"]["compliance_checklist"]["project_info"]["total_items"],
-                "critical_items": workflow_results["final_results"]["compliance_checklist"]["project_info"]["critical_items"],
-                "coverage_percentage": workflow_results["validation"]["coverage_map"]["coverage_percentage"],
-                "layout_efficiency": workflow_results["final_results"]["layout_design"]["layout_efficiency"],
-                "compliance_score": workflow_results["final_results"]["layout_design"]["compliance_score"]
-            }
-        }
-        
-        logger.info("✅ Enhanced analysis completed successfully")
-        return jsonify(response)
+        return jsonify(result)
         
     except Exception as e:
-        logger.error(f"Enhanced analysis failed: {e}")
+        logger.error(f"Error in enhanced_analysis: {e}")
         return jsonify({
-            "error": f"Enhanced analysis failed: {str(e)}",
-            "status": "error"
+            'success': False,
+            'error': str(e)
         }), 500
 
-# Frontend serving routes
+# Frontend Routes
 @app.route('/')
 def index():
-    """Serve the main frontend page"""
-    frontend_path = os.path.join(os.path.dirname(__file__), '..', 'frontend')
-    return send_from_directory(frontend_path, 'index.html')
+    """Serve main application"""
+    return send_from_directory('../frontend', 'index.html')
+
+@app.route('/pricing')
+def pricing_page():
+    """Serve pricing page"""
+    return send_from_directory('../frontend', 'pricing.html')
+
+@app.route('/register')
+def register_page():
+    """Serve registration page"""
+    return send_from_directory('../frontend', 'register.html')
+
+@app.route('/login')
+def login_page():
+    """Serve login page"""
+    return send_from_directory('../frontend', 'login.html')
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    """Serve user dashboard"""
+    return send_from_directory('../frontend', 'dashboard.html')
 
 @app.route('/styles.css')
 def serve_css():
-    """Serve the CSS file"""
-    frontend_path = os.path.join(os.path.dirname(__file__), '..', 'frontend')
-    return send_from_directory(frontend_path, 'styles.css', mimetype='text/css')
+    """Serve CSS with proper MIME type"""
+    return send_from_directory('../frontend', 'styles.css', mimetype='text/css')
 
 @app.route('/script.js')
 def serve_js():
-    """Serve the JavaScript file"""
-    frontend_path = os.path.join(os.path.dirname(__file__), '..', 'frontend')
-    return send_from_directory(frontend_path, 'script.js', mimetype='application/javascript')
+    """Serve JavaScript with proper MIME type"""
+    return send_from_directory('../frontend', 'script.js', mimetype='application/javascript')
 
 @app.route('/frontend/<path:filename>')
 def serve_frontend(filename):
-    """Serve frontend static files"""
-    frontend_path = os.path.join(os.path.dirname(__file__), '..', 'frontend')
-    
-    # Set proper MIME types
-    if filename.endswith('.css'):
-        return send_from_directory(frontend_path, filename, mimetype='text/css')
-    elif filename.endswith('.js'):
-        return send_from_directory(frontend_path, filename, mimetype='application/javascript')
-    else:
-        return send_from_directory(frontend_path, filename)
+    """Serve frontend files with proper MIME types"""
+    import mimetypes
+    mimetype, _ = mimetypes.guess_type(filename)
+    return send_from_directory('../frontend', filename, mimetype=mimetype)
 
 @app.route('/frontend/')
 def frontend_index():
-    """Serve frontend index when accessing /frontend/"""
-    frontend_path = os.path.join(os.path.dirname(__file__), '..', 'frontend')
-    return send_from_directory(frontend_path, 'index.html')
+    """Serve frontend index"""
+    return send_from_directory('../frontend', 'index.html')
 
 if __name__ == '__main__':
-    print("🏗️ Starting BCode Pro API Server...")
-    print("📋 Professional Building Code Analysis & CAD Integration")
-    print("🎯 From Code Analysis to CAD-Ready Designs")
-    print("🌐 Website: bcodepro.com")
-    print("📚 Database initialized")
+    # Ensure database directory exists
+    os.makedirs('database', exist_ok=True)
     
-    # Get port from environment variable or default to 5000
+    # Run the application
     port = int(os.environ.get('PORT', 5000))
-    host = os.environ.get('HOST', '0.0.0.0')
+    debug = os.environ.get('FLASK_ENV') == 'development'
     
-    print(f"🌐 Server starting on http://{host}:{port}")
-    print(f"📖 API Documentation: http://{host}:{port}/api/docs")
-    print(f"🎨 Professional Interface: http://{host}:{port}/")
+    logger.info(f"Starting BCode Pro API server on port {port}")
+    logger.info(f"Debug mode: {debug}")
+    logger.info(f"Database path: {DB_PATH}")
     
-    # Use production settings if deployed
-    debug = os.environ.get('FLASK_ENV') != 'production'
-    
-    app.run(host=host, port=port, debug=debug) 
+    app.run(host='0.0.0.0', port=port, debug=debug) 

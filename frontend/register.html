@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - BCode Pro</title>
+    <meta name="description" content="Create your BCode Pro account and start with 3 free building code compliance projects.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+    <div class="auth-container">
+        <!-- Header -->
+        <header class="auth-header">
+            <div class="logo-section">
+                <h1 class="app-title">BCode Pro</h1>
+                <p class="tagline">Professional Building Code Analysis</p>
+            </div>
+            <div class="auth-nav">
+                <span>Already have an account?</span>
+                <a href="/login" class="nav-link">Sign In</a>
+            </div>
+        </header>
+
+        <!-- Registration Form -->
+        <main class="auth-main">
+            <div class="auth-card">
+                <div class="auth-header-content">
+                    <h2>Create Your Account</h2>
+                    <p>Start with 3 free projects - no credit card required</p>
+                </div>
+
+                <!-- Plan Selection (if coming from pricing) -->
+                <div id="plan-selection" class="plan-selection" style="display: none;">
+                    <div class="selected-plan">
+                        <h4>Selected Plan:</h4>
+                        <div id="selected-plan-info" class="plan-info">
+                            <!-- Plan details will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Registration Form -->
+                <form id="registration-form" class="auth-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="first_name">First Name *</label>
+                            <input type="text" id="first_name" name="first_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name">Last Name *</label>
+                            <input type="text" id="last_name" name="last_name" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required>
+                        <small class="form-help">We'll send your verification link here</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number (Optional)</label>
+                        <input type="tel" id="phone" name="phone" placeholder="+1 (555) 123-4567">
+                        <small class="form-help">For account recovery and important updates</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password *</label>
+                        <input type="password" id="password" name="password" required minlength="8">
+                        <small class="form-help">At least 8 characters</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm Password *</label>
+                        <input type="password" id="confirm_password" name="confirm_password" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="company">Company/Organization</label>
+                            <input type="text" id="company" name="company" placeholder="Your company name">
+                        </div>
+                        <div class="form-group">
+                            <label for="profession">Profession</label>
+                            <select id="profession" name="profession">
+                                <option value="">Select your profession</option>
+                                <option value="architect">Architect</option>
+                                <option value="engineer_structural">Structural Engineer</option>
+                                <option value="engineer_mechanical">Mechanical Engineer</option>
+                                <option value="engineer_electrical">Electrical Engineer</option>
+                                <option value="engineer_plumbing">Plumbing Engineer</option>
+                                <option value="designer">Designer</option>
+                                <option value="contractor">Contractor</option>
+                                <option value="consultant">Consultant</option>
+                                <option value="student">Student</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Terms and Privacy -->
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="terms_accepted" name="terms_accepted" required>
+                            <span class="checkmark"></span>
+                            I agree to the <a href="/terms" target="_blank">Terms of Service</a> and <a href="/privacy" target="_blank">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="marketing_emails" name="marketing_emails">
+                            <span class="checkmark"></span>
+                            Send me product updates and building code news (optional)
+                        </label>
+                    </div>
+
+                    <!-- Error/Success Messages -->
+                    <div id="form-messages" class="form-messages"></div>
+
+                    <!-- Submit Button -->
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-full" id="register-btn">
+                            <span class="btn-text">Create Account</span>
+                            <span class="btn-loading" style="display: none;">Creating Account...</span>
+                        </button>
+                    </div>
+
+                    <!-- Hidden field for selected plan -->
+                    <input type="hidden" id="selected_plan" name="selected_plan" value="free">
+                </form>
+
+                <!-- Social Registration (Optional) -->
+                <div class="social-auth">
+                    <div class="divider">
+                        <span>or continue with</span>
+                    </div>
+                    <div class="social-buttons">
+                        <button type="button" class="btn btn-social google-btn" onclick="signInWithGoogle()">
+                            <svg class="social-icon" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                            </svg>
+                            Continue with Google
+                        </button>
+                        <button type="button" class="btn btn-social microsoft-btn" onclick="signInWithMicrosoft()">
+                            <svg class="social-icon" viewBox="0 0 24 24">
+                                <path fill="#f25022" d="M1 1h10v10H1z"/>
+                                <path fill="#00a4ef" d="M13 1h10v10H13z"/>
+                                <path fill="#7fba00" d="M1 13h10v10H1z"/>
+                                <path fill="#ffb900" d="M13 13h10v10H13z"/>
+                            </svg>
+                            Continue with Microsoft
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Footer Links -->
+                <div class="auth-footer">
+                    <p>By creating an account, you agree to our <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a>.</p>
+                    <p>Need help? <a href="/contact">Contact Support</a></p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="register.js"></script>
+</body>
+</html> 

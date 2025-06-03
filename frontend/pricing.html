@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - BCode Pro</title>
+    <meta name="description" content="Choose the perfect plan for your building code compliance needs. Start with 3 free projects or upgrade to professional plans.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="pricing.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-section">
+                <h1 class="app-title">BCode Pro</h1>
+                <p class="tagline">Professional Building Code Analysis</p>
+            </div>
+            <div class="header-nav">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/pricing" class="nav-link active">Pricing</a>
+                <a href="/login" class="nav-link">Login</a>
+                <a href="/register" class="nav-link btn-primary">Get Started</a>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Pricing Hero -->
+            <section class="pricing-hero">
+                <h1>Choose Your Plan</h1>
+                <p>Start with 3 free projects, then choose the plan that fits your needs</p>
+            </section>
+
+            <!-- Pricing Cards -->
+            <section class="pricing-section">
+                <!-- Annual/Monthly Toggle -->
+                <div class="billing-toggle">
+                    <span class="toggle-label">Monthly</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="annual-toggle">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="toggle-label">Annual <span class="save-badge">Save 2 months!</span></span>
+                </div>
+
+                <div class="pricing-grid">
+                    
+                    <!-- Free Plan -->
+                    <div class="pricing-card free-plan">
+                        <div class="plan-header">
+                            <h3>Free Trial</h3>
+                            <div class="price">
+                                <span class="currency">$</span>
+                                <span class="amount">0</span>
+                            </div>
+                            <p class="billing">3 free projects</p>
+                        </div>
+                        <div class="plan-features">
+                            <ul>
+                                <li>✅ 3 free projects</li>
+                                <li>✅ Basic analysis</li>
+                                <li>✅ Building code compliance</li>
+                                <li>✅ 2D layout generation</li>
+                                <li>⚠️ Watermarked exports</li>
+                                <li>✅ Email support</li>
+                            </ul>
+                        </div>
+                        <div class="plan-action">
+                            <a href="/register" class="btn btn-outline">Start Free Trial</a>
+                        </div>
+                        <div class="plan-target">Perfect for testing the platform</div>
+                    </div>
+
+                    <!-- Professional Plan -->
+                    <div class="pricing-card professional-plan popular">
+                        <div class="popular-badge">Most Popular</div>
+                        <div class="plan-header">
+                            <h3>Individual Professional</h3>
+                            <div class="price">
+                                <span class="currency">$</span>
+                                <span class="amount monthly-price">29</span>
+                                <span class="amount annual-price" style="display: none;">24</span>
+                                <span class="period monthly-period">/month</span>
+                                <span class="period annual-period" style="display: none;">/month</span>
+                            </div>
+                            <p class="billing monthly-billing">Perfect for individual professionals</p>
+                            <p class="billing annual-billing" style="display: none;">$290/year - Save $58!</p>
+                        </div>
+                        <div class="plan-features">
+                            <ul>
+                                <li>✅ Unlimited projects</li>
+                                <li>✅ Enhanced 7-step analysis</li>
+                                <li>✅ Professional exports (no watermarks)</li>
+                                <li>✅ CAD file exports (DXF/DWG)</li>
+                                <li>✅ PDF compliance reports</li>
+                                <li>✅ All building codes (NBC, Alberta, Ontario, BC)</li>
+                                <li>✅ Priority email support</li>
+                                <li>🛡️ Compliance guarantee*</li>
+                            </ul>
+                        </div>
+                        <div class="plan-action">
+                            <a href="/register?plan=professional" class="btn btn-primary">Start Professional</a>
+                        </div>
+                        <div class="plan-target">Solo architects, junior designers, consultants</div>
+                    </div>
+
+                    <!-- Project Plan -->
+                    <div class="pricing-card project-plan">
+                        <div class="plan-header">
+                            <h3>Pay Per Project</h3>
+                            <div class="price">
+                                <span class="currency">$</span>
+                                <span class="amount">15</span>
+                                <span class="period">/project</span>
+                            </div>
+                            <p class="billing">No monthly commitment</p>
+                        </div>
+                        <div class="plan-features">
+                            <ul>
+                                <li>✅ Single project access</li>
+                                <li>✅ All professional features</li>
+                                <li>✅ 30-day project access</li>
+                                <li>✅ Professional exports</li>
+                                <li>✅ CAD file exports</li>
+                                <li>✅ Priority support</li>
+                                <li>✅ Perfect for occasional use</li>
+                            </ul>
+                        </div>
+                        <div class="plan-action">
+                            <a href="/register?plan=project" class="btn btn-secondary">Buy Single Project</a>
+                        </div>
+                        <div class="plan-target">Consultants, occasional users</div>
+                    </div>
+
+                    <!-- NEW: Firm Plan -->
+                    <div class="pricing-card firm-plan">
+                        <div class="new-badge">New!</div>
+                        <div class="plan-header">
+                            <h3>Small/Medium Firm</h3>
+                            <div class="price">
+                                <span class="currency">$</span>
+                                <span class="amount monthly-price">149</span>
+                                <span class="amount annual-price" style="display: none;">124</span>
+                                <span class="period monthly-period">/month</span>
+                                <span class="period annual-period" style="display: none;">/month</span>
+                            </div>
+                            <p class="billing monthly-billing">Up to 10 users</p>
+                            <p class="billing annual-billing" style="display: none;">$1,490/year - Save $298!</p>
+                        </div>
+                        <div class="plan-features">
+                            <ul>
+                                <li>✅ Everything in Professional</li>
+                                <li>✅ Up to 10 team members</li>
+                                <li>✅ Team collaboration & sharing</li>
+                                <li>✅ Custom branding on reports</li>
+                                <li>✅ Bulk project management</li>
+                                <li>✅ Usage analytics & reporting</li>
+                                <li>✅ Phone + email support</li>
+                                <li>🛡️ Compliance guarantee*</li>
+                                <li>🎁 5 bonus credits/month for add-ons</li>
+                            </ul>
+                        </div>
+                        <div class="plan-action">
+                            <a href="/register?plan=firm" class="btn btn-primary">Start Firm Plan</a>
+                        </div>
+                        <div class="plan-target">Small/medium architecture studios, MEP firms</div>
+                    </div>
+
+                    <!-- Team Plan -->
+                    <div class="pricing-card team-plan">
+                        <div class="plan-header">
+                            <h3>Large Team</h3>
+                            <div class="price">
+                                <span class="currency">$</span>
+                                <span class="amount monthly-price">99</span>
+                                <span class="amount annual-price" style="display: none;">83</span>
+                                <span class="period monthly-period">/month</span>
+                                <span class="period annual-period" style="display: none;">/month</span>
+                            </div>
+                            <p class="billing monthly-billing">Up to 5 users</p>
+                            <p class="billing annual-billing" style="display: none;">$990/year - Save $198!</p>
+                        </div>
+                        <div class="plan-features">
+                            <ul>
+                                <li>✅ Everything in Professional</li>
+                                <li>✅ Up to 5 team members</li>
+                                <li>✅ Team collaboration</li>
+                                <li>✅ Custom branding on reports</li>
+                                <li>✅ API access (basic)</li>
+                                <li>✅ Priority support</li>
+                                <li>✅ Usage analytics</li>
+                                <li>🛡️ Compliance guarantee*</li>
+                            </ul>
+                        </div>
+                        <div class="plan-action">
+                            <a href="/register?plan=team" class="btn btn-secondary">Start Team Plan</a>
+                        </div>
+                        <div class="plan-target">Boutique studios, specialized consultants</div>
+                    </div>
+
+                    <!-- Enterprise Plan -->
+                    <div class="pricing-card enterprise-plan">
+                        <div class="plan-header">
+                            <h3>Enterprise</h3>
+                            <div class="price">
+                                <span class="currency">$</span>
+                                <span class="amount monthly-price">299</span>
+                                <span class="amount annual-price" style="display: none;">249</span>
+                                <span class="period monthly-period">/month</span>
+                                <span class="period annual-period" style="display: none;">/month</span>
+                            </div>
+                            <p class="billing monthly-billing">Unlimited users</p>
+                            <p class="billing annual-billing" style="display: none;">$2,990/year - Save $598!</p>
+                        </div>
+                        <div class="plan-features">
+                            <ul>
+                                <li>✅ Everything in Firm plan</li>
+                                <li>✅ Unlimited users</li>
+                                <li>✅ Custom jurisdictions & codes</li>
+                                <li>✅ White-label options</li>
+                                <li>✅ Dedicated account manager</li>
+                                <li>✅ Custom integrations & API</li>
+                                <li>✅ SLA guarantee (99.9% uptime)</li>
+                                <li>🛡️ Compliance guarantee*</li>
+                                <li>🎁 Unlimited credits for add-ons</li>
+                            </ul>
+                        </div>
+                        <div class="plan-action">
+                            <a href="/contact-sales" class="btn btn-outline">Contact Sales</a>
+                        </div>
+                        <div class="plan-target">Large multidisciplinary firms, public sector</div>
+                    </div>
+
+                </div>
+
+                <!-- Add-ons Section -->
+                <div class="addons-section">
+                    <h3>🎁 Add-ons & Credits</h3>
+                    <p>Enhance your plan with additional features using credits</p>
+                    <div class="addons-grid">
+                        <div class="addon-card">
+                            <h4>Additional Jurisdiction</h4>
+                            <div class="addon-price">$5 <span class="credits">(1 credit)</span></div>
+                            <p>Add support for IBC, local codes</p>
+                        </div>
+                        <div class="addon-card">
+                            <h4>3D Layout Export</h4>
+                            <div class="addon-price">$10 <span class="credits">(2 credits)</span></div>
+                            <p>Export 3D models for Revit/SketchUp</p>
+                        </div>
+                        <div class="addon-card">
+                            <h4>Expedited Review</h4>
+                            <div class="addon-price">$25 <span class="credits">(5 credits)</span></div>
+                            <p>Human expert review within 24 hours</p>
+                        </div>
+                        <div class="addon-card">
+                            <h4>BIM Integration</h4>
+                            <div class="addon-price">$50 <span class="credits">(10 credits)</span></div>
+                            <p>Custom AutoCAD/Revit plugin setup</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Compliance Guarantee Section -->
+            <section class="guarantee-section">
+                <div class="guarantee-content">
+                    <h3>🛡️ Our Compliance Guarantee</h3>
+                    <p>We stand behind our analysis with specific building code clause references. If any regulatory authority disputes our compliance recommendations and you can demonstrate the error was in our analysis (not project-specific conditions), we will:</p>
+                    <div class="guarantee-points">
+                        <div class="guarantee-point">
+                            <span class="point-number">1</span>
+                            <span class="point-text">Work with you to resolve the issue at no charge</span>
+                        </div>
+                        <div class="guarantee-point">
+                            <span class="point-number">2</span>
+                            <span class="point-text">Provide expert consultation to address the concern</span>
+                        </div>
+                        <div class="guarantee-point">
+                            <span class="point-number">3</span>
+                            <span class="point-text">Offer a full refund if we cannot resolve the dispute</span>
+                        </div>
+                    </div>
+                    <p class="guarantee-note">*This guarantee applies to standard building code interpretations within supported jurisdictions.</p>
+                </div>
+            </section>
+
+            <!-- FAQ Section -->
+            <section class="faq-section">
+                <h2>Frequently Asked Questions</h2>
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <h4>What's included in the free trial?</h4>
+                        <p>You get 3 complete project analyses with basic features. No credit card required to start.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Can I upgrade or downgrade anytime?</h4>
+                        <p>Yes, you can change your plan at any time. Changes take effect at your next billing cycle.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>What file formats do you support for export?</h4>
+                        <p>We support PDF reports, DXF and DWG files for CAD import, and CSV data exports.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Which building codes are supported?</h4>
+                        <p>We support NBC, Alberta, Ontario, and BC building codes, with more jurisdictions coming soon.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Is there a setup fee?</h4>
+                        <p>No setup fees. You only pay the monthly subscription or per-project fee.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Do you offer refunds?</h4>
+                        <p>Yes, we offer a 30-day money-back guarantee for all paid plans.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <section class="cta-section">
+                <h2>Ready to Get Started?</h2>
+                <p>Join thousands of professionals who trust BCode Pro for their building code compliance needs.</p>
+                <div class="cta-buttons">
+                    <a href="/register" class="btn btn-primary btn-large">Start Free Trial</a>
+                    <a href="/contact-sales" class="btn btn-outline btn-large">Contact Sales</a>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>BCode Pro</h4>
+                    <p class="footer-subtitle">CodeCompliance Pro</p>
+                    <p>Professional building code compliance for architects and PME engineers worldwide.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="/">Features</a></li>
+                        <li><a href="/pricing">Pricing</a></li>
+                        <li><a href="/api/docs">API</a></li>
+                        <li><a href="/integrations">Integrations</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="/help">Help Center</a></li>
+                        <li><a href="/contact">Contact Us</a></li>
+                        <li><a href="/status">System Status</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="/about">About</a></li>
+                        <li><a href="/privacy">Privacy</a></li>
+                        <li><a href="/terms">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="pricing.js"></script>
+</body>
+</html> 
