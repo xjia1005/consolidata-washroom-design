@@ -8,8 +8,8 @@ import sqlite3
 import hashlib
 import secrets
 import smtplib
-from email.mime.text import MimeText
-from email.mime.multipart import MimeMultipart
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timedelta
 import stripe
 import os
@@ -354,7 +354,7 @@ class UserAuthSystem:
                 print("SMTP credentials not configured")
                 return False
             
-            msg = MimeMultipart()
+            msg = MIMEMultipart()
             msg['From'] = smtp_username
             msg['To'] = email
             msg['Subject'] = "Verify your BCode Pro account"
@@ -371,7 +371,7 @@ class UserAuthSystem:
             The BCode Pro Team
             """
             
-            msg.attach(MimeText(body, 'plain'))
+            msg.attach(MIMEText(body, 'plain'))
             
             server = smtplib.SMTP(smtp_server, smtp_port)
             server.starttls()
