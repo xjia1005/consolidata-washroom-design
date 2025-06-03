@@ -349,8 +349,9 @@ def health_check():
         'status': 'healthy',
         'timestamp': datetime.now().isoformat(),
         'version': '1.0.0',
-        'service': 'CodeCompliance Pro API',
-        'description': 'Professional Building Code Analysis & CAD Integration'
+        'service': 'BCode Pro API',
+        'description': 'Professional Building Code Analysis & CAD Integration',
+        'website': 'bcodepro.com'
     })
 
 @app.route('/api/calculate-fixtures', methods=['POST'])
@@ -515,10 +516,12 @@ def complete_analysis():
 def api_documentation():
     """API documentation endpoint"""
     docs = {
-        'title': 'CodeCompliance Pro API',
+        'title': 'BCode Pro API',
+        'subtitle': 'CodeCompliance Pro',
         'version': '1.0.0',
         'description': 'Professional building code compliance and CAD-ready layout generation for architects and PME engineers',
         'tagline': 'From Code Analysis to CAD-Ready Designs',
+        'website': 'bcodepro.com',
         'target_users': [
             'Architects',
             'PME Engineers (Plumbing, Mechanical, Electrical)',
@@ -669,9 +672,10 @@ def frontend_index():
     return send_from_directory(frontend_path, 'index.html')
 
 if __name__ == '__main__':
-    print("🏗️ Starting CodeCompliance Pro API Server...")
+    print("🏗️ Starting BCode Pro API Server...")
     print("📋 Professional Building Code Analysis & CAD Integration")
     print("🎯 From Code Analysis to CAD-Ready Designs")
+    print("🌐 Website: bcodepro.com")
     print("📚 Database initialized")
     
     # Get port from environment variable or default to 5000

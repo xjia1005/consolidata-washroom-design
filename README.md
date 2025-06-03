@@ -1,13 +1,16 @@
-# 🏗️ CodeCompliance Pro
-## From Code Analysis to CAD-Ready Designs
+# 🏗️ BCode Pro
+## Professional Building Code Analysis
+### From Code Analysis to CAD-Ready Designs
 
-**Professional building code compliance and layout generation for architects and PME engineers worldwide.**
+**BCode Pro (CodeCompliance Pro) - Professional building code compliance and layout generation for architects and PME engineers worldwide.**
+
+🌐 **Live at**: [bcodepro.com](https://bcodepro.com)
 
 ---
 
-## 🎯 **What is CodeCompliance Pro?**
+## 🎯 **What is BCode Pro?**
 
-CodeCompliance Pro is a professional-grade software solution that transforms complex building code analysis into streamlined, CAD-ready designs. Built specifically for architects, plumbing engineers, mechanical engineers, and electrical engineers, it provides instant compliance checking and generates professional layouts ready for AutoCAD and Revit integration.
+BCode Pro is a professional-grade software solution that transforms complex building code analysis into streamlined, CAD-ready designs. Built specifically for architects, plumbing engineers, mechanical engineers, and electrical engineers, it provides instant compliance checking and generates professional layouts ready for AutoCAD and Revit integration.
 
 ### **Key Benefits:**
 - ⚡ **Instant Compliance Analysis** - Real-time building code checking
@@ -77,8 +80,8 @@ http://localhost:5000
 ```
 
 ### **For Production:**
-- **Live Demo**: [CodeCompliance Pro on Railway](https://your-app.railway.app)
-- **API Documentation**: `/api/docs`
+- **Live Application**: [bcodepro.com](https://bcodepro.com)
+- **API Documentation**: [bcodepro.com/api/docs](https://bcodepro.com/api/docs)
 - **Professional Support**: Available for enterprise users
 
 ---
@@ -120,9 +123,10 @@ http://localhost:5000
 - **Responsive Design** - Desktop and mobile compatibility
 
 ### **Deployment:**
-- **Production Ready** - Railway/Render/Vercel deployment
+- **Production Ready** - Railway hosting with custom domain
 - **Scalable Architecture** - Supports concurrent users
 - **Professional Reliability** - Enterprise-grade uptime
+- **Custom Domain** - bcodepro.com
 
 ---
 
@@ -210,8 +214,8 @@ http://localhost:5000
 
 ## 🚀 **Getting Started**
 
-### **Try CodeCompliance Pro:**
-1. **Visit the Live Demo** - Experience the professional interface
+### **Try BCode Pro:**
+1. **Visit**: [bcodepro.com](https://bcodepro.com)
 2. **Test with Sample Projects** - See real compliance analysis
 3. **Export CAD Files** - Download professional layouts
 4. **Subscribe for Full Access** - Unlock all professional features
@@ -224,6 +228,8 @@ http://localhost:5000
 
 ---
 
-**CodeCompliance Pro - Transforming building code compliance for design professionals worldwide.** 🏗️
+**BCode Pro - Transforming building code compliance for design professionals worldwide.** 🏗️
 
 *Professional. Accurate. CAD-Ready.*
+
+🌐 **Visit**: [bcodepro.com](https://bcodepro.com)
